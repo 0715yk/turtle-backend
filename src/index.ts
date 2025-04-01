@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 라우트
+// 기본 루트 경로
 app.get("/", (req, res) => {
   res.send("코인 스크리닝 API가 실행 중입니다.");
 });
@@ -34,9 +34,9 @@ app.get("/api/screen", async (req, res) => {
     res.json(results);
   } catch (error: any) {
     console.error("스크리닝 오류:", error);
-    res
-      .status(500)
-      .json({ error: error.message || "스크리닝 중 오류가 발생했습니다." });
+    res.status(500).json({
+      error: error.message || "스크리닝 중 오류가 발생했습니다.",
+    });
   }
 });
 

@@ -1,6 +1,32 @@
 // src/utils/indicators.ts
 import { CandleData } from "../types/screener";
 
+// WMA 계산 함수
+export function calculateWMA(data: number[], period: number): number[] {
+  const result: number[] = [];
+
+  for (let i = 0; i < data.length; i++) {
+    if (i < period - 1) {
+      result.push(NaN);
+      continue;
+    }
+
+    let sum = 0;
+    let weight = 0;
+
+    for (let j = 0; j < period; j++) {
+      const value = data[i - j];
+      const currentWeight = period - j;
+      sum += value * currentWeight;
+      weight += currentWeight;
+    }
+
+    result.push(sum / weight);
+  }
+
+  return result;
+}
+
 // HMA 계산 함수
 export function calculateHMA(data: number[], period: number): number[] {
   // WMA(2 * WMA(n/2) - WMA(n)), sqrt(n))
@@ -25,32 +51,6 @@ export function calculateHMA(data: number[], period: number): number[] {
   const hma = calculateWMA(rawHma, sqrtPeriod);
 
   return hma;
-}
-
-// WMA 계산 함수
-function calculateWMA(data: number[], period: number): number[] {
-  const result: number[] = [];
-
-  for (let i = 0; i < data.length; i++) {
-    if (i < period - 1) {
-      result.push(NaN);
-      continue;
-    }
-
-    let sum = 0;
-    let weight = 0;
-
-    for (let j = 0; j < period; j++) {
-      const value = data[i - j];
-      const currentWeight = period - j;
-      sum += value * currentWeight;
-      weight += currentWeight;
-    }
-
-    result.push(sum / weight);
-  }
-
-  return result;
 }
 
 // RSI 계산 함수
